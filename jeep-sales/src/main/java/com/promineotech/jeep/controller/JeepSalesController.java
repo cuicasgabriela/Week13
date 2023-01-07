@@ -5,14 +5,19 @@ package com.promineotech.jeep.controller;
 
 import java.util.List;
 
+import javax.validation.constraints.Pattern;
+
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
 import com.promineotech.jeep.entity.Jeep;
+import com.promineotech.jeep.entity.JeepModel;
 
+import io.swagger.v3.core.util.Constants;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.Operation;
@@ -22,9 +27,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.Parameter;
 
+@Validated
 @RequestMapping("/jeeps")
 @OpenAPIDefinition(info = @Info(title = "Jeep Sales Service" ), servers = {
-		@Server(url = "http://localhost: 8080", description = "Local server.")})
+		@Server(url ="http://localhost:8080", description = "Local server.")})
 
 public interface JeepSalesController {
 	// @formatter:off
@@ -67,7 +73,12 @@ public interface JeepSalesController {
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
 	List<Jeep> fetchJeeps(
-			@RequestParam(required = false) String model, 
-			@RequestParam(required = false) String trim);
+			@RequestParam(required = false) 
+				//JeepModel model, 
+			String model, 
+			//@Length(max = Constants.TRIM_MAX_LENGTH)
+			@Pattern(regexp = "[\\w\\s]*")
+			@RequestParam(required = false) 
+				String trim);
 	// @formatter:on
 }
